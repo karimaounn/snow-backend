@@ -1,5 +1,6 @@
-import { Controller, Get } from '@nestjs/common';
+import { Controller, Get, Param } from '@nestjs/common';
 import { AppService } from './app.service';
+import { Map } from './map.model';
 
 @Controller()
 export class AppController {
@@ -11,7 +12,12 @@ export class AppController {
   }
 
   @Get('maps')
-  getMaps(): { id: string }[] {
-    return [{ id: '1' }, { id: '2' }];
+  async getMaps(): Promise<{ id: string }[]> {
+    return await this.appService.getMapIds();
+  }
+
+  @Get('maps/:id')
+  async getMapDetails(@Param('id') id): Promise<Map> {
+    return await this.appService.getMapById(id)
   }
 }
